@@ -107,6 +107,9 @@ export default function SvgSlider() {
     },
   ];
 
+  
+/////
+
   const stats = [
     { number: "300K+", label: "companies hiring" },
     { number: "10K+", label: "new openings everyday" },
