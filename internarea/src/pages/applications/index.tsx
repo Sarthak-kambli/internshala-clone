@@ -55,7 +55,7 @@ const index = () => {
   useEffect(() => {
     const fetchdata = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/application")
+        const res = await axios.get("https://internshala-clone-86xf.onrender.com/api/application")
         setdata(res.data);
       } catch (error) {
         console.log(error);
@@ -74,7 +74,7 @@ const index = () => {
   const handleacceptandreject = async (id: any, action: any) => {
     try {
       const res = await axios.put(
-        `http://localhost:5000/api/application/${id}`,
+        `https://internshala-clone-86xf.onrender.com/api/application/${id}`,
         { action }
       );
       const updateappliacrtion = data.map((app: any) =>

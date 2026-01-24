@@ -26,7 +26,7 @@ const index = () => {
         }
         try {
             setisloading(true);
-            const res = await axios.post('http://localhost:5000/api/admin/adminlogin', formdata);
+            const res = await axios.post('https://internshala-clone-86xf.onrender.com/api/admin/adminlogin', formdata);
             toast.success("logged in successfuly");
             router.push("/adminpanel");
         } catch (error) {

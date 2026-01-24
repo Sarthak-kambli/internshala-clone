@@ -121,7 +121,7 @@ const index = () => {
   useEffect(() => {
     const fetchdata = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/job/${id}`)
+        const res = await axios.get(`https://internshala-clone-86xf.onrender.com/api/job/${id}`)
         setjjob(res.data)
       } catch (error) {
         console.log(error)
@@ -158,7 +158,7 @@ const index = () => {
         Application:id,
         availability
       }
-      await axios.post("http://localhost:5000/api/application",applicationdata)
+      await axios.post("https://internshala-clone-86xf.onrender.com/api/application",applicationdata)
       toast.success("Application submit successfully")
       router.push('/job')
     } catch (error) {
