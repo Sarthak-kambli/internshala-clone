@@ -345,7 +345,7 @@ export default function SvgSlider() {
                   Jobs
                 </span>
                 <Link
-                  href={`/detailjob?q=${job._id}`}
+                  href={`/detailjob/${job._id}`}
                   className="text-blue-600 hover:text-blue-700 flex items-center gap-1"
                 >
                   View details
