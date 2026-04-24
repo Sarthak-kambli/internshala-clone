@@ -74,18 +74,23 @@ import { toast } from "react-toastify";
 const index = () => {
   const router = useRouter();
   const { id } = router.query;
-  const [internshipData,setinternship]=useState<any>([])
-  useEffect(()=>{
-    const fetchdata=async()=>{
+  const [internshipData, setinternship] = useState<any>([])
+  useEffect(() => {
+    if (!id) return; // ✅ IMPORTANT
+
+    const fetchdata = async () => {
       try {
-        const res=await axios.get( `https://internshala-clone-86xf.onrender.com/api/internship/${id}`)     
-        setinternship(res.data)
+        const res = await axios.get(
+          `https://internshala-clone-86xf.onrender.com/api/internship/${id}`
+        );
+        setinternship(res.data);
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
-    }
-    fetchdata()
-  },[id])
+    };
+
+    fetchdata();
+  }, [id]);
   const [availability, setAvailability] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [coverLetter, setCoverLetter] = useState("");
@@ -97,32 +102,81 @@ const index = () => {
       </div>
     );
   }
-  const handlesubmitapplication=async()=>{
-    if(!coverLetter.trim()){
-      toast.error("please write a cover letter")
-      return
+  // const handlesubmitapplication=async()=>{
+  //   if(!coverLetter.trim()){
+  //     toast.error("please write a cover letter")
+  //     return
+  //   }
+  //   if(!availability){
+  //     toast.error("please select your availability")
+  //     return
+  //   }
+  //   try {
+  //     const applicationdata={
+  //       category:internshipData.category,
+  //       company:internshipData.company,
+  //       coverLetter:coverLetter,
+  //       user: user?._id,
+  //       Application:id,
+  //       availability
+  //     }
+  //     await axios.post("https://internshala-clone-86xf.onrender.com/api/application",applicationdata)
+  //     toast.success("Application submit successfully")
+  //     router.push('/internship')
+  //   } catch (error) {
+  //     console.error(error);
+  //     toast.error(error.response?.data?.message || "Failed to submit application"
+  //   );
+  //   }
+  // }
+  const handlesubmitapplication = async () => {
+    if (!coverLetter.trim()) {
+      toast.error("please write a cover letter");
+      return;
     }
-    if(!availability){
-      toast.error("please select your availability")
-      return
+
+    if (!availability) {
+      toast.error("please select your availability");
+      return;
     }
+
+    if (!user?._id) {
+      toast.error("User not logged in properly");
+      return;
+    }
+
     try {
-      const applicationdata={
-        category:internshipData.category,
-        company:internshipData.company,
-        coverLetter:coverLetter,
-        user:user,
-        Application:id,
-        availability
-      }
-      await axios.post("https://internshala-clone-86xf.onrender.com/api/application",applicationdata)
-      toast.success("Application submit successfully")
-      router.push('/internship')
-    } catch (error) {
-      console.error(error)
-      toast.error("Failed to submit application")
+      const applicationdata = {
+        category: internshipData.category,
+        company: internshipData.company,
+        coverLetter: coverLetter,
+
+        // ✅ FIX HERE (MOST IMPORTANT)
+        user: user._id,
+
+        Application: id,
+        availability,
+      };
+
+      await axios.post(
+        "https://internshala-clone-86xf.onrender.com/api/application",
+        applicationdata
+      )
+
+      toast.success("Application submit successfully");
+      router.push("/internship");
+    } catch (error: any) {
+      console.error(error);
+
+      // ✅ SHOW BACKEND ERROR (IMPORTANT)
+      toast.error(
+        error.response?.data?.message || "Failed to submit application"
+      );
+      console.log("USER DATA:", user);
     }
-  }
+  };
+  console.log("FINAL USER:", user);
+  console.log("USER FROM REDUX:", user);
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
       <div className="bg-white rounded-lg shadow-lg overflow-hidden">

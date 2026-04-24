@@ -9,6 +9,9 @@ import { auth } from "@/firebase/firebase";
 import { login, logout } from "@/Feature/Userslice";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 export default function App({ Component, pageProps }: AppProps) {
   function AuthListener() {
     const dispatch = useDispatch();
@@ -25,7 +28,13 @@ export default function App({ Component, pageProps }: AppProps) {
             })
           );
         } else {
-          dispatch(logout());
+          const storedUser = localStorage.getItem("user");
+
+          if (storedUser) {
+            dispatch(login(JSON.parse(storedUser)));
+          } else {
+            dispatch(logout());
+          }
         }
       });
     }, [dispatch]);
@@ -35,7 +44,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <Provider store={store}>
       <AuthListener />
       <div className="bg-white">
-        <ToastContainer/>
+        <ToastContainer />
         <Navbar />
         <Component {...pageProps} />
         <Footer />

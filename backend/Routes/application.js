@@ -1,72 +1,118 @@
 const express = require("express");
 const router = express.Router();
-const application = require("../Model/Application");
+const Application = require("../Model/Application");
+const User = require("../Model/User");
 
+// ================= APPLY =================
 router.post("/", async (req, res) => {
-  const applicationipdata = new application({
-    company: req.body.company,
-    category: req.body.category,
-    coverLetter: req.body.coverLetter,
-    user: req.body.user,
-    Application: req.body.Application,
-    body: req.body.body,
-  });
-  await applicationipdata
-    .save()
-    .then((data) => {
-      res.send(data);
-    })
-    .catch((error) => {
-      console.log(error);
+  try {
+    const { user } = req.body;
+
+    if (!user) {
+      return res.status(400).json({ message: "User ID required" });
+    }
+
+    const foundUser = await User.findById(user);
+
+    if (!foundUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // ✅ FIXED DEFAULTS (IMPORTANT)
+    if (foundUser.plan === undefined) foundUser.plan = "FREE";
+    if (foundUser.applicationsUsed === undefined) foundUser.applicationsUsed = 0;
+
+    // ✅ PLAN LIMIT CHECK
+    if (foundUser.plan === "FREE" && foundUser.applicationsUsed >= 1) {
+      return res.status(400).json({ message: "Free plan limit reached" });
+    }
+
+    if (foundUser.plan === "BRONZE" && foundUser.applicationsUsed >= 3) {
+      return res.status(400).json({ message: "Bronze plan limit reached" });
+    }
+
+    if (foundUser.plan === "SILVER" && foundUser.applicationsUsed >= 5) {
+      return res.status(400).json({ message: "Silver plan limit reached" });
+    }
+
+    // ✅ CREATE APPLICATION
+    const newApplication = new Application({
+      company: req.body.company,
+      category: req.body.category,
+      coverLetter: req.body.coverLetter,
+      user: user,
+      Application: req.body.Application,
     });
+
+    const savedData = await newApplication.save();
+
+    // ✅ INCREMENT COUNT
+    foundUser.applicationsUsed += 1;
+    await foundUser.save();
+
+    res.status(200).json({
+      message: "Applied successfully",
+      data: savedData,
+    });
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
 });
+
+// ================= GET ALL =================
 router.get("/", async (req, res) => {
   try {
-    const data = await application.find();
-    res.json(data).status(200);
+    const data = await Application.find();
+    res.status(200).json(data);
   } catch (error) {
     console.log(error);
-    res.status(404).json({ error: "internal server error" });
+    res.status(500).json({ error: "Internal server error" });
   }
 });
+
+// ================= GET BY ID =================
 router.get("/:id", async (req, res) => {
-  const { id } = req.params;
   try {
-    const data = await application.findById(id);
+    const data = await Application.findById(req.params.id);
+
     if (!data) {
-      res.status(404).json({ error: "application not found" });
+      return res.status(404).json({ error: "Application not found" });
     }
-    res.json(data).status(200);
+
+    res.status(200).json(data);
   } catch (error) {
     console.log(error);
-    res.status(404).json({ error: "internal server error" });
+    res.status(500).json({ error: "Internal server error" });
   }
 });
+
+// ================= UPDATE STATUS =================
 router.put("/:id", async (req, res) => {
-  const { id } = req.params;
   const { action } = req.body;
+
   let status;
-  if (action === "accepted") {
-    status = "accepted";
-  } else if (action === "rejected") {
-    status = "rejected";
-  } else {
-    res.status(404).json({ error: "Invalid action" });
-    return;
-  }
+  if (action === "accepted") status = "accepted";
+  else if (action === "rejected") status = "rejected";
+  else return res.status(400).json({ error: "Invalid action" });
+
   try {
-    const updateapplication = await application.findByIdAndUpdate(
-      id,
+    const updated = await Application.findByIdAndUpdate(
+      req.params.id,
       { $set: { status } },
       { new: true }
     );
-    if (!updateapplication) {
-      res.status(404).json({ error: "Not able to update the application" });
-      return;
+
+    if (!updated) {
+      return res.status(404).json({ error: "Application not found" });
     }
-    res.status(200).json({ sucess: true, data: updateapplication });
+
+    res.status(200).json({ success: true, data: updated });
   } catch (error) {
-    res.status(500).json({ error: "internal server error" });
+    console.log(error);
+    res.status(500).json({ error: "Internal server error" });
   }
 });
+
 module.exports = router;
