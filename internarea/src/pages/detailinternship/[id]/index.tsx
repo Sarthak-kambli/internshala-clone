@@ -70,7 +70,7 @@ import { toast } from "react-toastify";
 //     numberOfopning: "1",
 //   },
 // ];
-
+//
 const index = () => {
   const router = useRouter();
   const { id } = router.query;
