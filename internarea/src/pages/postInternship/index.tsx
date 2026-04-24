@@ -45,7 +45,7 @@ const index = () => {
     }
     try {
       setisloading(true);
-      const res = await axios.post("https://internshala-clone-backend-xzpg.onrender.com/api/internship", formData);
+      const res = await axios.post("https://internshala-clone-ciaz.onrender.com/api/internship", formData);
       toast.success("internship posted successfuly");
       router.push("/adminpanel");
     } catch (error) {

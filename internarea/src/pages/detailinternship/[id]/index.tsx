@@ -81,7 +81,7 @@ const index = () => {
     const fetchdata = async () => {
       try {
         const res = await axios.get(
-          `https://internshala-clone-backend-xzpg.onrender.com/api/internship/${id}`
+          `https://internshala-clone-ciaz.onrender.com/api/internship/${id}`
         );
         setinternship(res.data);
       } catch (error) {
@@ -120,7 +120,7 @@ const index = () => {
   //       Application:id,
   //       availability
   //     }
-  //     await axios.post("https://internshala-clone-backend-xzpg.onrender.com/api/application",applicationdata)
+  //     await axios.post("https://internshala-clone-ciaz.onrender.com/api/application",applicationdata)
   //     toast.success("Application submit successfully")
   //     router.push('/internship')
   //   } catch (error) {
@@ -159,7 +159,7 @@ const index = () => {
       };
 
       await axios.post(
-        "https://internshala-clone-backend-xzpg.onrender.com/api/application",
+        "https://internshala-clone-ciaz.onrender.com/api/application",
         applicationdata
       )
 

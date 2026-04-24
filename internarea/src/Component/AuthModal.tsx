@@ -43,7 +43,7 @@ export default function AuthModal({ isOpen, onClose }: any) {
                 : { phone: form.emailOrPhone, password: form.password };
 
             const res = await axios.post(
-                "https://internshala-clone-backend-xzpg.onrender.com/api/auth/login",
+                "https://internshala-clone-ciaz.onrender.com/api/auth/login",
                 payload
             );
 
@@ -73,7 +73,7 @@ export default function AuthModal({ isOpen, onClose }: any) {
                   };
 
             await axios.post(
-                "https://internshala-clone-backend-xzpg.onrender.com/api/auth/signup",
+                "https://internshala-clone-ciaz.onrender.com/api/auth/signup",
                 payload
             );
 
@@ -94,7 +94,7 @@ export default function AuthModal({ isOpen, onClose }: any) {
                 : { phone: form.emailOrPhone, newPassword: form.password };
 
             const res = await axios.post(
-                "https://internshala-clone-backend-xzpg.onrender.com/api/auth/forgot-password",
+                "https://internshala-clone-ciaz.onrender.com/api/auth/forgot-password",
                 payload
             );
 
