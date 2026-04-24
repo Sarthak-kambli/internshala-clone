@@ -28,7 +28,7 @@ export default function FeedPage() {
 
   const fetchPosts = async () => {
     try {
-      const res = await axios.get("https://internshala-clone-86xf.onrender.com/api/post/all");
+      const res = await axios.get("https://internshala-clone-backend-xzpg.onrender.com/api/post/all");
       setPosts(res.data);
     } catch (error) {
       console.error("Error fetching posts", error);
@@ -52,7 +52,7 @@ export default function FeedPage() {
   const handleLike = async (postId: string) => {
     if (!requireAuth()) return;
 
-    await axios.post(`https://internshala-clone-86xf.onrender.com/api/post/like/${postId}`, {
+    await axios.post(`https://internshala-clone-backend-xzpg.onrender.com/api/post/like/${postId}`, {
       uid: currentUid,
     });
 
@@ -67,7 +67,7 @@ export default function FeedPage() {
       return;
     }
 
-    await axios.post(`https://internshala-clone-86xf.onrender.com/api/post/comment/${postId}`, {
+    await axios.post(`https://internshala-clone-backend-xzpg.onrender.com/api/post/comment/${postId}`, {
       uid: currentUid,
       text: commentText[postId],
     });
@@ -80,7 +80,7 @@ export default function FeedPage() {
     if (!requireAuth()) return;
 
     try {
-      await axios.post(`https://internshala-clone-86xf.onrender.com/api/post/share/${postId}`, {
+      await axios.post(`https://internshala-clone-backend-xzpg.onrender.com/api/post/share/${postId}`, {
         uid: currentUid,
       });
       toast.success("Post shared successfully");
@@ -110,7 +110,7 @@ export default function FeedPage() {
       formData.append("text", postText);
       if (mediaFile) formData.append("media", mediaFile);
 
-      await axios.post("https://internshala-clone-86xf.onrender.com/api/post/create", formData);
+      await axios.post("https://internshala-clone-backend-xzpg.onrender.com/api/post/create", formData);
 
       toast.success("Post created successfully");
       setPostText("");

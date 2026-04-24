@@ -23,7 +23,7 @@ export default function ForgotPasswordPage() {
       if (phone) payload.phone = phone;
 
       const res = await axios.post(
-        "https://internshala-clone-86xf.onrender.com/api/auth/forgot-password",
+        "https://internshala-clone-backend-xzpg.onrender.com/api/auth/forgot-password",
         payload
       );
 

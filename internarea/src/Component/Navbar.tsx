@@ -44,7 +44,7 @@ const Navbar = () => {
             const firebaseUser = result.user;
 
             const res = await axios.post(
-                "https://internshala-clone-86xf.onrender.com/api/user/create",
+                "https://internshala-clone-backend-xzpg.onrender.com/api/user/create",
                 {
                     uid: firebaseUser.uid,
                     name: firebaseUser.displayName,
